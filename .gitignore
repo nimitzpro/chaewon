@@ -1,0 +1,8 @@
+books/
+papers/
+
+.venv/
+
+other/
+
+.DS_Store
