@@ -16,8 +16,17 @@
   abstract: none,
   body,
 ) = {
-  // Document and page setup matching the LaTeX a4paper, 12pt
-  set page(paper: "a4")
+  set page(
+    paper: "a4",
+    footer: context [
+      #set align(center)
+      #set text(8pt)
+      #counter(page).display(
+        "1 of 1",
+        both: true,
+      )
+    ],
+  )
   set text(font: "Libertinus Serif", size: 12pt)
   // set text(font: "Helvetica", size: 12pt)
 
