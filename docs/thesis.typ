@@ -47,4 +47,7 @@
 
 = Conclusions
 
+= Data
+Oxford-Man Institute’s Realized Volatility Indices: #link("https://github.com/jonathancornelissen/highfrequency")
+
 #bibliography("./citations.bib", style: "ieee")
