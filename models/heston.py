@@ -47,7 +47,7 @@ def simulate_single_path(params, key, n_steps, T):
     # Stack into shape (n_steps+1, 2)
     return jnp.stack([log_S_full, V_full], axis=-1)
 
-def simulate(params: dict, key: jax.Array, n_paths: int, n_steps: int, T: float) -> jnp.ndarray:
+def simulate_heston(params: dict, key: jax.Array, n_paths: int, n_steps: int, T: float) -> jnp.ndarray:
     """
     The unified interface expected by the diagnostics layer.
     Returns: jnp.ndarray of shape (n_paths, n_steps+1, 2)
