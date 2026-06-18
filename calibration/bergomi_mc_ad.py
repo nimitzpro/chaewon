@@ -77,13 +77,24 @@ def calibrate_bergomi_mc_ad(market_snapshot, static_key, model_type="rough", ste
     def inv_softplus(x): return jnp.log(jnp.exp(x) - 1.0)
     def inv_tanh(x): return jnp.arctanh(x)
 
-    # Initial guesses: eta=1.5, rho=-0.7, H=0.1, v0=0.04
-    init_raw = jnp.array([
-        inv_softplus(1.5), 
-        inv_tanh(-0.7), 
-        inv_softplus(0.5 - 0.1), 
-        inv_softplus(0.04)
-    ])
+    # Inside calibrate_bergomi_mc_ad, replace the init_raw block with this:
+    if model_type == "path_dependent":
+        # PD-Bergomi requires a much higher initial vol-of-vol and a NEGATIVE Hurst parameter 
+        # to compensate for the epsilon smoothing at t=0.
+        init_raw = jnp.array([
+            inv_softplus(2.5),          # Higher eta (e.g., 2.5) to force stochasticity
+            inv_tanh(-0.7),             # rho
+            inv_softplus(0.5 - (-0.1)), # Start H at -0.1 (Requires softplus target of 0.6)
+            inv_softplus(0.04)          # v0
+        ])
+    else:
+        # Standard Rough/1F initialization
+        init_raw = jnp.array([
+            inv_softplus(1.5), 
+            inv_tanh(-0.7), 
+            inv_softplus(0.5 - 0.1),    # Start H at 0.1
+            inv_softplus(0.04)
+        ])
 
     optimizer = optax.adam(learning_rate=lr)
     opt_state = optimizer.init(init_raw)
